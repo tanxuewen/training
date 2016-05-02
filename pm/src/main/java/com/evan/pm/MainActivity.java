@@ -1,8 +1,10 @@
 package com.evan.pm;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.DialogTitle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -20,6 +22,7 @@ import com.evan.pm.activity.DetailsActivity;
 import com.evan.pm.adapter.InfoAdapter;
 import com.evan.pm.db.DBHelper;
 import com.evan.pm.entity.Account;
+import com.evan.xtool.utils.CommonUtils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -73,8 +76,10 @@ public class MainActivity extends BaseActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, AddAccountActivity.class);
-                    startActivity(intent);
+                    Dialog dialog = CommonUtils.createLoadingDialog(context, null);
+                    dialog.show();
+//                    Intent intent = new Intent(context, AddAccountActivity.class);
+//                    startActivity(intent);
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 }

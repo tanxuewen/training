@@ -1,1 +1,1 @@
-include ':pm', ':gobang'
+include ':pm', ':gobang', ':xtool'
