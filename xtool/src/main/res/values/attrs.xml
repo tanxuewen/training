@@ -3,4 +3,12 @@
     <declare-styleable name="FolderTextView">
         <attr name="foldline" format="integer" />
     </declare-styleable>
+
+
+    <declare-styleable name="LoadingView">
+        <attr name="count" format="integer" />
+        <attr name="circleColor" format="color" />
+        <attr name="radius" format="dimension"/>
+    </declare-styleable>
+
 </resources>

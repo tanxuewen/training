@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 
 import com.evan.pm.R;
+import com.evan.pm.db.AccountDao;
 import com.evan.pm.db.DBHelper;
 import com.evan.pm.entity.Account;
 
@@ -71,11 +72,8 @@ public class AddAccountActivity extends BaseActivity implements View.OnClickList
         account.setCategory(category_spinner.getSelectedItem().toString());
         account.setRemark(remark_et.getText().toString());
 
-        try {
-            DBHelper.getInstance(context).getAccountDao().createOrUpdate(account);
-        } catch (SQLException e) {
-            Toast.makeText(AddAccountActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
-        }
+        AccountDao accountDao = new AccountDao(context);
+        accountDao.add(account);
         finish();
     }
 }

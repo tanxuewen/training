@@ -11,13 +11,72 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    productFlavors{
+        sit{
+            applicationId "com.evan.pm.sit"
+            minSdkVersion 15
+            targetSdkVersion 23
+            versionCode 1
+            versionName "1.0"
+        }
+        uat{
+            applicationId "com.evan.pm.uat"
+            minSdkVersion 15
+            targetSdkVersion 23
+            versionCode 1
+            versionName "1.0"
+        }
+        pro{
+            applicationId "com.evan.pm.pro"
+            minSdkVersion 15
+            targetSdkVersion 23
+            versionCode 1
+            versionName "1.0"
+        }
+    }
+
+    sourceSets{
+        sit{
+
+        }
+        uat{
+
+        }
+        pro{
+
+        }
+    }
+
+  /*  signingConfigs {
+        release {
+            storeFile file("myreleasekey.keystore")
+            storePassword "password"
+            keyAlias "MyReleaseKey"
+            keyPassword "password"
+        }
+    }*/
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
         }
+
+        debug {
+            applicationIdSuffix ".debug"
+        }
+
     }
 }
+
+task myCopy(type:Copy) {
+
+}
+
+
+println "in pm HomeDir "+gradle.gradleHomeDir
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -25,7 +84,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
 
-    compile 'com.android.volley:volley:1.0.0'
+//    compile 'com.android.volley:volley:1.0.0'
+
+    //ormlite
     compile 'com.j256.ormlite:ormlite-android:latest.release'
+
+    //上下拉刷新
+    compile 'in.srain.cube:ultra-ptr:latest.release'
     compile project(':xtool')
 }

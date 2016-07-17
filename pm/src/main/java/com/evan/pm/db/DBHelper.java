@@ -12,6 +12,10 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 数据库帮助类
@@ -22,9 +26,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private static final String TABLE_NAME = "account.db";
     private static final int VERSION = 1;
 
-    private Dao<Account, Integer> accountDao;
-
-    private Dao<Category, Integer> categoryDao;
+    private Map<String, Dao> daoMap = new HashMap<>();
 
     private Context context;
 
@@ -69,32 +71,26 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    /**
-     * 获取AccountDao
-     * @return
-     * @throws SQLException
-     */
-    public Dao<Account, Integer> getAccountDao() throws SQLException {
-        if(accountDao == null){
-            accountDao = getDao(Account.class);
+    public Dao getDao(Class clazz){
+
+        Dao dao = null;
+        String className = clazz.getName();
+
+        if(daoMap.containsKey(className)){
+            dao = daoMap.get(className);
         }
 
-        return accountDao;
-    }
-
-    /**
-     * 获取CategoryDao
-     * @return
-     * @throws SQLException
-     */
-    public Dao<Category, Integer> getCategoryDao() throws SQLException {
-        if(categoryDao == null){
-            categoryDao = getDao(Category.class);
+        if(dao == null){
+            try {
+                dao = super.getDao(clazz);
+                daoMap.put(className, dao);
+            } catch (SQLException e) {
+                dao = null;
+            }
         }
 
-        return categoryDao;
+        return dao;
     }
-
 
     /**
      * 释放资源
@@ -102,6 +98,10 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void close() {
         super.close();
-        accountDao = null;
+
+        for (String key: daoMap.keySet()) {
+            Dao dao = daoMap.get(key);
+            dao = null;
+        }
     }
 }

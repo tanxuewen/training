@@ -3,6 +3,7 @@
     package="com.evan.pm">
 
     <application
+        android:name=".XApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_password"
         android:label="@string/app_name"
@@ -20,9 +21,11 @@
         </activity>
         <activity
             android:name=".activity.DetailsActivity"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AddAccountActivity"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

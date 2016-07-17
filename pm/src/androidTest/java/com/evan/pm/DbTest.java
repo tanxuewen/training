@@ -4,6 +4,8 @@ package com.evan.pm;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.evan.pm.db.AccountDao;
+import com.evan.pm.db.CategoryDao;
 import com.evan.pm.db.DBHelper;
 import com.evan.pm.entity.Account;
 import com.evan.pm.entity.Category;
@@ -18,8 +20,7 @@ public class DbTest extends AndroidTestCase {
 
     public static final String TAG = DbTest.class.getSimpleName();
 
-    public void testAddAccount(){
-        DBHelper dbHelper = DBHelper.getInstance(getContext());
+    public void testAddAccount() {
 
         Account account = new Account();
         account.setUrl("http://www.csdn.com");
@@ -28,30 +29,24 @@ public class DbTest extends AndroidTestCase {
         account.setPassword("ysjipyygy");
         account.setRemark("技术学习网站");
 
+        AccountDao accountDao = new AccountDao(getContext());
+        accountDao.add(account);
+
         Category category = new Category();
         category.setCategory("tech");
         category.setDescription("技术网站");
 
-        try {
-            dbHelper.getAccountDao().create(account);
-            dbHelper.getCategoryDao().create(category);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        CategoryDao categoryDao = new CategoryDao(getContext());
+        categoryDao.add(category);
     }
 
-    public void testDeleteAccount(){
-        DBHelper dbHelper = DBHelper.getInstance(getContext());
-        try {
-            dbHelper.getAccountDao().deleteById(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void testDeleteAccount() {
+
+        AccountDao accountDao = new AccountDao(getContext());
+        accountDao.deleteById(1);
     }
 
-    public void testUpdateAccount(){
-        DBHelper dbHelper = DBHelper.getInstance(getContext());
-
+    public void testUpdateAccount() {
         Account account = new Account();
         account.setUrl("http://www.baidu.com");
         account.setDescription("百度一下");
@@ -59,29 +54,24 @@ public class DbTest extends AndroidTestCase {
         account.setPassword("ysjipyygy");
         account.setId(3);
 
-        try {
-            dbHelper.getAccountDao().update(account);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        AccountDao accountDao = new AccountDao(getContext());
+        accountDao.update(account);
     }
 
-    public void testList(){
-        DBHelper dbHelper = DBHelper.getInstance(getContext());
-        try {
-            List<Account> accounts = dbHelper.getAccountDao().queryForAll();
-            for (Account account: accounts) {
-                Log.i(TAG, account.toString());
-                //fjfa
-            }
+    public void testList() {
 
-            List<Category> categories = dbHelper.getCategoryDao().queryForAll();
-            for (Category category: categories) {
-                Log.i(TAG, category.toString());
-                //fjfa
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        AccountDao accountDao = new AccountDao(getContext());
+        List<Account> accounts = accountDao.queryAll();
+        for (Account account : accounts) {
+            Log.i(TAG, account.toString());
+            //fjfa
+        }
+
+        CategoryDao categoryDao = new CategoryDao(getContext());
+        List<Category> categories = categoryDao.queryAll();
+        for (Category category : categories) {
+            Log.i(TAG, category.toString());
+            //fjfa
         }
     }
 }
