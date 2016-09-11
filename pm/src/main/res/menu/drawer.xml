@@ -2,18 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group>
-        <item android:id="@+id/navigation_favorite"
-            android:checkable="true"
-            android:title="@string/favorite"
-            android:icon="@drawable/loading"/>
         <item android:id="@+id/navigation_category"
             android:checkable="true"
-            android:title="@string/category"
-            android:icon="@drawable/loading"/>
+            android:title="@string/category"/>
         <item android:id="@+id/navigation_setting"
             android:checkable="true"
-            android:title="@string/settings"
-            android:icon="@drawable/loading"/>
+            android:title="@string/settings"/>
     </group>
 
 </menu>

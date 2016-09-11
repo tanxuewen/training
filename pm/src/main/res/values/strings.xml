@@ -7,5 +7,7 @@
 
     <string name="open">打开</string>
     <string name="close">关闭</string>
+    <string name="category_type">请输入分类名称</string>
+    <string name="save">保存</string>
 
 </resources>

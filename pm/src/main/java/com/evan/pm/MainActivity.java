@@ -1,89 +1,115 @@
 package com.evan.pm;
 
-import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.evan.pm.activity.AddAccountActivity;
+import com.evan.pm.activity.AccountAddActivity;
 import com.evan.pm.activity.BaseActivity;
 import com.evan.pm.activity.DetailsActivity;
+import com.evan.pm.activity.category.CategoryListActivity;
 import com.evan.pm.adapter.DividerItemDecoration;
 import com.evan.pm.adapter.InfoAdapter;
+import com.evan.pm.adapter.OnRecyclerViewItemClickListener;
+import com.evan.pm.common.Constant;
 import com.evan.pm.db.AccountDao;
-import com.evan.pm.db.DBHelper;
 import com.evan.pm.entity.Account;
-import com.evan.xtool.utils.CommonUtils;
+import com.evan.xtool.ui.EmptyView;
+import com.evan.xtool.ui.XDialog;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends BaseActivity {
 
+    @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
 
+    @BindView(R.id.info_lv)
     RecyclerView info_ryv;
+    @BindView(R.id.empty_view)
+    EmptyView emptyView;
+    @BindView(R.id.navigation)
+    NavigationView navigation;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     List<Account> accounts;
     InfoAdapter adapter;
 
     AccountDao accountDao;
+    XDialog dialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        resetToolBarHeight(toolbar);
+    protected int getLayoutResID() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void init() {
+
         setSupportActionBar(toolbar);
 
         accountDao = new AccountDao(context);
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-
         ActionBarDrawerToggle mActionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         mActionBarDrawerToggle.syncState();
         drawerLayout.addDrawerListener(mActionBarDrawerToggle);
 
+        emptyView.bindView(info_ryv);
+
         accounts = new ArrayList<>();
-        info_ryv = (RecyclerView) findViewById(R.id.info_lv);
         adapter = new InfoAdapter(context, accounts);
+        info_ryv.setLayoutManager(new LinearLayoutManager(this));
         info_ryv.setAdapter(adapter);
-        info_ryv.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL_LIST));
+        info_ryv.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL_LIST));
 
-//        info_ryv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Account account = (Account) parent.getAdapter().getItem(position);
-//                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-//                intent.putExtra("account", account);
-//                startActivity(intent);
-//            }
-//        });
+        adapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Account account = accounts.get(position);
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra("account", account);
+                startActivity(intent);
+            }
+        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null)
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Dialog dialog = CommonUtils.createLoadingDialog(context, null);
-                    dialog.show();
-//                    Intent intent = new Intent(context, AddAccountActivity.class);
-//                    startActivity(intent);
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                if (item.getItemId() == R.id.navigation_category) {
+                    Intent intent = new Intent(context, CategoryListActivity.class);
+                    startActivity(intent);
+                    return true;
+                }else if(item.getItemId() == R.id.navigation_setting){
+
                 }
-            });
+                return false;
+            }
+        });
+
+        dialog = new XDialog(context);
+    }
+
+    private void updateEmpty() {
+        if (accounts.isEmpty()) {
+            emptyView.empty();
+        } else {
+            emptyView.success();
+        }
     }
 
     @Override
@@ -102,7 +128,7 @@ public class MainActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            Intent intent = new Intent(context, AddAccountActivity.class);
+            Intent intent = new Intent(context, AccountAddActivity.class);
             startActivity(intent);
         }
 
@@ -125,5 +151,13 @@ public class MainActivity extends BaseActivity {
         accounts.clear();
         accounts.addAll(list);
         adapter.notifyDataSetChanged();
+        updateEmpty();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

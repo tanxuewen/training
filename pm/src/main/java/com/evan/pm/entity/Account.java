@@ -14,7 +14,7 @@ public class Account implements Serializable {
     public static final String ID = "id";
     public static final String URL = "url";
     public static final String DESCRIPTION = "description";
-    public static final String CATEGORY = "category";
+    public static final String CATEGORY_ID = "category_id";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String REMARK = "remark";
@@ -25,8 +25,8 @@ public class Account implements Serializable {
     private String url;
     @DatabaseField(useGetSet = true, columnName = DESCRIPTION)
     private String description;
-    @DatabaseField(useGetSet = true, columnName = CATEGORY)
-    private String category;
+    @DatabaseField(useGetSet = true, columnName = CATEGORY_ID, defaultValue = "-1")
+    private int category;
     @DatabaseField(useGetSet = true, columnName = USERNAME)
     private String username;
     @DatabaseField(useGetSet = true, columnName = PASSWORD)
@@ -35,7 +35,6 @@ public class Account implements Serializable {
     private String remark;
 
     public Account() {
-        category = "default";
     }
 
     public int getId() {
@@ -62,11 +61,11 @@ public class Account implements Serializable {
         this.description = description;
     }
 
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 
@@ -96,8 +95,8 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        String str = "ACCOUNT --> id:"+id+" url:" + url + " description:" + description + " category:"+category
-                + " username:" + username + " password:" + password+" remark:"+remark;
+        String str = "ACCOUNT --> id:" + id + " url:" + url + " description:" + description + " category:" + category
+                + " username:" + username + " password:" + password + " remark:" + remark;
         return str;
     }
 }

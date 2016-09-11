@@ -10,13 +10,10 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Category {
 
     public static final String ID = "id";
-    public static final String DESCRIPTION = "description";
     public static final String CATEGORY = "category";
 
     @DatabaseField(generatedId = true, useGetSet = true, columnName = ID)
     private int id;
-    @DatabaseField(useGetSet = true, columnName = DESCRIPTION)
-    private String description;
     @DatabaseField(useGetSet = true, unique = true, columnName = CATEGORY)
     private String category;
 
@@ -26,14 +23,6 @@ public class Category {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getCategory() {
@@ -46,7 +35,7 @@ public class Category {
 
     @Override
     public String toString() {
-        String str = "CATEGORY --> id:"+id+" description:" + description + " category:"+category;
+        String str = "CATEGORY --> id:" + id + " category:" + category;
         return str;
     }
 }

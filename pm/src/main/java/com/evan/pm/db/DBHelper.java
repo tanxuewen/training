@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
+import com.evan.pm.XApp;
 import com.evan.pm.entity.Account;
 import com.evan.pm.entity.Category;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -32,16 +33,18 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
     private static DBHelper instance;
 
+    String[] defautlCategorys = new String[]{"技术", "科技", "新闻", "休闲"};
+
     private DBHelper(Context context) {
         super(context, TABLE_NAME, null, VERSION);
         this.context = context;
     }
 
     //单例
-    public static synchronized DBHelper getInstance(Context context){
-        if(instance == null){
-            synchronized (DBHelper.class){
-                if(instance == null){
+    public static synchronized DBHelper getInstance(Context context) {
+        if (instance == null) {
+            synchronized (DBHelper.class) {
+                if (instance == null) {
                     instance = new DBHelper(context);
                 }
             }
@@ -55,8 +58,19 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTable(connectionSource, Account.class);
             TableUtils.createTable(connectionSource, Category.class);
+            addDefaultCategory(database);
         } catch (SQLException e) {
             Toast.makeText(context, "创建数据库失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //添加默认的类别
+    private void addDefaultCategory(SQLiteDatabase database) {
+
+        String sql = "";
+        for (String category : defautlCategorys) {
+            sql = "insert into category (category) values ('" + category + "')";
+            database.execSQL(sql);
         }
     }
 
@@ -71,16 +85,16 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    public Dao getDao(Class clazz){
+    public Dao getDao(Class clazz) {
 
         Dao dao = null;
         String className = clazz.getName();
 
-        if(daoMap.containsKey(className)){
+        if (daoMap.containsKey(className)) {
             dao = daoMap.get(className);
         }
 
-        if(dao == null){
+        if (dao == null) {
             try {
                 dao = super.getDao(clazz);
                 daoMap.put(className, dao);
@@ -99,7 +113,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void close() {
         super.close();
 
-        for (String key: daoMap.keySet()) {
+        for (String key : daoMap.keySet()) {
             Dao dao = daoMap.get(key);
             dao = null;
         }

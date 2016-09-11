@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 23
@@ -28,7 +29,7 @@ android {
             versionName "1.0"
         }
         pro{
-            applicationId "com.evan.pm.pro"
+            applicationId "com.evan.pm"
             minSdkVersion 15
             targetSdkVersion 23
             versionCode 1
@@ -48,27 +49,43 @@ android {
         }
     }
 
-  /*  signingConfigs {
+    signingConfigs {
         release {
-            storeFile file("myreleasekey.keystore")
-            storePassword "password"
-            keyAlias "MyReleaseKey"
-            keyPassword "password"
+            storeFile file("D:/keystore/release.jks")
+            storePassword "ysjipyygy"
+            keyAlias "evan.tan"
+            keyPassword "ysjipyygy"
         }
-    }*/
+    }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
+
+            //修改文件名
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为boohee_v1.0_2015-06-15_wandoujia.apk
+                        def fileName = "pm_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
         }
 
         debug {
             applicationIdSuffix ".debug"
         }
-
     }
+}
+
+// 定义一个打包时间
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
 
 task myCopy(type:Copy) {
@@ -79,17 +96,19 @@ task myCopy(type:Copy) {
 println "in pm HomeDir "+gradle.gradleHomeDir
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-
-//    compile 'com.android.volley:volley:1.0.0'
-
+    //    compile 'com.android.volley:volley:1.0.0'
     //ormlite
     compile 'com.j256.ormlite:ormlite-android:latest.release'
-
     //上下拉刷新
     compile 'in.srain.cube:ultra-ptr:latest.release'
+    compile 'in.srain.cube:cube-sdk:1.0.44@aar'
     compile project(':xtool')
+
+    //butterknife
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }

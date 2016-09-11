@@ -8,31 +8,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.evan.pm.R;
-import com.evan.pm.entity.Account;
+import com.evan.pm.entity.Category;
 
 import java.util.List;
 
-
 /**
- * Created by evan on 2016/4/22.
+ * Created by evan on 2016/9/11.
  */
-public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder>{
 
-    List<Account> accounts;
+    List<Category> categories;
     Context context;
+    OnRecyclerViewItemClickListener onItemClickListener;
 
-    private OnRecyclerViewItemClickListener onItemClickListener;
-
-    public InfoAdapter(Context context, List<Account> accounts) {
+    public CategoryAdapter(Context context, List<Category> data) {
         super();
         this.context = context;
-        this.accounts = accounts;
+        this.categories = data;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_info, null);
-        MyViewHolder holder = new MyViewHolder(itemView);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_category, null);
+        MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
@@ -42,9 +40,8 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Account account = accounts.get(position);
-        holder.desc_tv.setText(account.getDescription());
-        holder.username_tv.setText(account.getUsername());
+        Category category = categories.get(position);
+        holder.desc_tv.setText(category.getCategory());
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,18 +55,16 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return accounts.size();
+        return categories.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView desc_tv;
-        TextView username_tv;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            desc_tv = ((TextView) itemView.findViewById(R.id.info_item_desc));
-            username_tv = (TextView) itemView.findViewById(R.id.info_item_username);
+            desc_tv = ((TextView) itemView.findViewById(R.id.category_item_desc));
         }
     }
 }

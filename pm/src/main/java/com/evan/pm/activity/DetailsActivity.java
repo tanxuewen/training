@@ -1,45 +1,60 @@
 package com.evan.pm.activity;
 
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.evan.pm.R;
+import com.evan.pm.XApp;
 import com.evan.pm.entity.Account;
+import com.evan.xtool.utils.ThreeDes;
+
+import butterknife.BindView;
 
 public class DetailsActivity extends BaseActivity {
 
     Account account;
 
+    @BindView(R.id.details_desc)
     EditText desc_et;
+    @BindView(R.id.details_username)
     EditText username_et;
+    @BindView(R.id.details_password)
     EditText password_et;
+    @BindView(R.id.details_url)
     EditText url_et;
+    @BindView(R.id.details_remark)
     EditText remark_et;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+    protected int getLayoutResID() {
+        return R.layout.activity_details;
+    }
+
+    @Override
+    protected void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         account = (Account) getIntent().getSerializableExtra("account");
 
-        desc_et = (EditText) findViewById(R.id.details_desc);
-        username_et = (EditText) findViewById(R.id.details_username);
-        password_et = (EditText) findViewById(R.id.details_password);
-        url_et = (EditText) findViewById(R.id.details_url);
-        remark_et = (EditText) findViewById(R.id.details_remark);
+        String password = new String(ThreeDes.decryptMode(XApp.iv, XApp.key, ThreeDes.decodeHex(account.getPassword())));
 
         desc_et.setText(account.getDescription());
         username_et.setText(account.getUsername());
-        password_et.setText(account.getPassword());
+        password_et.setText(password);
         url_et.setText(account.getUrl());
         remark_et.setText(account.getRemark());
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
