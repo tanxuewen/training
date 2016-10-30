@@ -16,6 +16,8 @@ import butterknife.OnClick;
 
 /**
  * Created by evan on 2016/9/11.
+ * 分类添加界面
+ *
  */
 public class CategoryAddActivity extends BaseActivity {
 

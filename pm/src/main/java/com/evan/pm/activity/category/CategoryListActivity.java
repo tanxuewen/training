@@ -26,6 +26,7 @@ import butterknife.OnClick;
 
 /**
  * Created by evan on 2016/9/11.
+ * 分类列表界面
  */
 public class CategoryListActivity extends BaseActivity {
 

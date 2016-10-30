@@ -30,14 +30,13 @@ public class DbTest extends AndroidTestCase {
         account.setRemark("技术学习网站");
 
         AccountDao accountDao = new AccountDao(getContext());
-        accountDao.add(account);
+        accountDao.save(account);
 
         Category category = new Category();
         category.setCategory("tech");
-        category.setDescription("技术网站");
 
         CategoryDao categoryDao = new CategoryDao(getContext());
-        categoryDao.add(category);
+        categoryDao.save(category);
     }
 
     public void testDeleteAccount() {

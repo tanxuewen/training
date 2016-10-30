@@ -1,16 +1,21 @@
 package com.evan.pm.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+
+import com.evan.pm.R;
 
 import butterknife.ButterKnife;
 
 /**
  * Created by evan on 2016/4/21.
+ * Activity基类
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
 
     protected Context context;
 
@@ -18,6 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        beforeView(savedInstanceState);
         int layoutResID = getLayoutResID();
         if (layoutResID > 0) {
             setContentView(getLayoutResID());
@@ -25,6 +31,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         init();
+    }
+
+    protected void beforeView(Bundle savedInstanceState) {
+
     }
 
 
@@ -48,4 +58,22 @@ public abstract class BaseActivity extends AppCompatActivity {
 ////                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 //        }
 //    }
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+    }
 }

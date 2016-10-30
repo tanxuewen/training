@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 23
@@ -71,7 +70,7 @@ android {
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         // 输出apk名称为boohee_v1.0_2015-06-15_wandoujia.apk
                         def fileName = "pm_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
-                        output.outputFile = new File(outputFile.parent, fileName)
+                        output.outputFile = new File("D:/apk", fileName)
                     }
                 }
             }
@@ -110,5 +109,8 @@ dependencies {
 
     //butterknife
     compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    //七牛服务
+    compile 'com.qiniu:qiniu-android-sdk:7.2.+'
 }

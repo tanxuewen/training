@@ -29,6 +29,7 @@ import butterknife.BindView;
 
 /**
  * Created by evan on 2016/4/22.
+ * 帐号添加界面
  */
 public class AccountAddActivity extends BaseActivity implements View.OnClickListener{
 

@@ -3,6 +3,8 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="gray">#aaa</color>
+    <color name="red">#ff0000</color>
+    <color name="red_press">#FF3C3C</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="translucent">#80000000</color>
 </resources>

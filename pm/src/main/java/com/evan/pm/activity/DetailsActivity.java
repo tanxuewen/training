@@ -11,6 +11,9 @@ import com.evan.xtool.utils.ThreeDes;
 
 import butterknife.BindView;
 
+/**
+ * 帐号详情界面
+ */
 public class DetailsActivity extends BaseActivity {
 
     Account account;

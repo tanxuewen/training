@@ -9,5 +9,8 @@
     <string name="close">关闭</string>
     <string name="category_type">请输入分类名称</string>
     <string name="save">保存</string>
+    <string name="login_hint">请输入密码</string>
+    <string name="ok">确定</string>
+    <string name="excess_count_hint">密码错误次数过多，请%1$d分钟后再试。</string>
 
 </resources>
